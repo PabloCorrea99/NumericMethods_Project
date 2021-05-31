@@ -203,7 +203,15 @@ namespace Proyecto
         }
 
 
-
+		/// <summary>
+		/// Metodo de Jacobi para solucionar sistemas de ecuaciones lineales	Ax=B usando el PC de Pablo
+		/// </summary>
+		/// <param name="laMatriz">Matriz A</param>
+		/// <param name="respuesta">Vector B</param>
+		/// <param name="iterations">Numero de iteraciones, si no es colocado son 50 iteracions</param>
+		/// <param name="e">Error, si no es colocado el error es de 0.2</param>
+		/// <param name="iGuess">Vector del valor inicial, si no es colocado se ponen un vector 0</param>
+		/// <returns>Vector con la solucion, que para o por iteracion o por error</returns>
 		public static double[] JacobiMethodParalelPablo(double[][] laMatriz, double[] respuesta, bool imprimir = false, int iterations = 50, double e = 0.02, double[] iGuess = null)
         {
 			if(laMatriz.Length < 11)
