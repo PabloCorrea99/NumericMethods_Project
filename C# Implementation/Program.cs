@@ -67,7 +67,7 @@ namespace Proyecto
 			VectoresYMatrices.leerVector(x);	
 			
 			Jacobi.JacobiMethod(p,x,false,100,0);
-			Jacobi.JacobiMethodParalel(p,x,false,100,0);
+			Jacobi.JacobiMethodParalelPablo(p,x,false,100,0);
 			
 			// //-----------------------------------------------------------
 			// // Creando randoms
