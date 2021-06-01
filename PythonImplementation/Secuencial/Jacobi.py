@@ -2,34 +2,39 @@ import numpy as np
 from ReadData import readMatrix, readVector
 import time
 
+
+
 '''
-Método que calcula la solución a un sistema de ecuaciones lineales por medio del método iterativo de Jacobi.
+Método que calcula (haciendo uso del paralelismo) la solución a un sistema de ecuaciones lineales por medio del método iterativo de Jacobi.
 Entradas: Matriz Diagonalmente Dominante A, vector independiente b, tolerancia y maximo de iteraciones.
 Salida: Vector de solución x.
 '''
-
-def jacobi(A, b, tolerance=1e-10, max_iterations=500):
-    t0 = time.time()
-    x = np.zeros_like(b, dtype=np.double)
-    #x = Tx + C
-    T = A - np.diag(np.diagonal(A)) #Se crea la matriz de iteraciones
+def jacobi(a, b, x, tolerance=1e-10, kmax=500):
     
-    for k in range(max_iterations):
-        
-        x_old  = x.copy() #Se copia la x vieja para el calculo de la convergencia
-        
-        x[:] = (b - np.dot(T, x)) / np.diagonal(A) #Se calcula el x -> b-suma/aii 
-        
+    n = a.shape[0]
+    k = 1
+
+    while k < kmax:
+        x_old  = x.copy()
+        for i in range(n):
+            suma = 0
+            for j in range(n):
+                if j != i:
+                    suma += a[i,j]*x[j]
+            x[i] = (b[i] - suma) / a[i,i]        
+        k += 1
         if np.linalg.norm(x - x_old, ord=np.inf) / np.linalg.norm(x, ord=np.inf) < tolerance: #se verifica la tolerancia para ver si hubo convergencia
             break
-    t1 = time.time()     
-    total = t1-t0
-    print(total)     
+
     return x
 
 #Se crea la matriz A
-matrixA = readMatrix()
-#Se crea el vector b
-vectorB = readVector()
-x = jacobi(matrixA, vectorB)
-print(x)
+A = readMatrix()
+
+# initialize the RHS vector
+b = readVector()
+x = np.zeros_like(b, dtype=np.double)
+result = jacobi(A,b,x)
+print(result)
+
+
