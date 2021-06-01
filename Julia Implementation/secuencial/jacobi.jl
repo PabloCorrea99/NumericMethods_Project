@@ -1,7 +1,7 @@
 using LinearAlgebra
 
 function read_matrix_A()
-    stream = open("C:/Users/Usuario/Desktop/Universidad/7 SEMESTRE/NumericMethods_Project/matriz.txt", "r")
+    stream = open("C:/Users/Usuario/Desktop/Universidad/7SEMESTRE/NumericMethods_Project/matriz.txt", "r")
 
     line_count = 1
     A = Array{Float64}(undef, 10000, 10000)
@@ -21,7 +21,7 @@ function read_matrix_A()
 end
 
 function read_vector_b()
-    stream = open("C:/Users/Usuario/Desktop/Universidad/7 SEMESTRE/NumericMethods_Project/vector.txt", "r")
+    stream = open("C:/Users/Usuario/Desktop/Universidad/7SEMESTRE/NumericMethods_Project/vector.txt", "r")
 
     b = Array{Float64}(undef, 10000)
 
@@ -64,6 +64,7 @@ function jacobi(A, b, x0, tol, maxiter)
         #print(x, rel_diff, "\n")
         x_prev = copy(x)
     end
+    println(x)
     return x, rel_diff, k
 end
 

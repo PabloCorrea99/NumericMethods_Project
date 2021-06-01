@@ -2,6 +2,11 @@ import numpy as np
 import time
 from ReadData import readMatrix, readVector
 
+'''
+Método que calcula la solución a un sistema de ecuaciones lineales por medio del método iterativo de Gauss-Seidel.
+Entradas: Matriz Diagonalmente Dominante A, vector independiente b, tolerancia y maximo de iteraciones.
+Salida: Vector de solución x.
+'''
 
 def gauss_seidel(A, b, tolerance=1e-10, max_iterations=100):
     t0 = time.time()
@@ -26,11 +31,9 @@ def gauss_seidel(A, b, tolerance=1e-10, max_iterations=100):
     print(total)        
     return x
 
-A = np.array([[10., -1., 2., 0.],
-              [-1., 11., -1., 3.],
-              [2., -1., 10., -1.],
-              [0.0, 3., -1., 8.]])
-# initialize the RHS vector
-b = np.array([6., 25., -11., 15.])
-x = gauss_seidel(A, b)
+#Se crea la matriz A
+matrixA = readMatrix()
+#Se crea el vector b
+vectorB = readVector()
+x = gauss_seidel(matrixA, vectorB)
 print(x)
