@@ -1,9 +1,7 @@
 using System;
-using System.Linq;
-using System.IO;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Threading.Tasks;
+using System.Linq;	//Vector de 0s
+using System.Diagnostics; // StopWatch
+using System.Threading.Tasks; // Tasks
 
 namespace Proyecto
 {
@@ -102,6 +100,17 @@ namespace Proyecto
             Stopwatch stopwatch = new Stopwatch();
 			stopwatch.Start();
 			int l = laMatriz.Length;
+			int s = l/16;
+			int m = l%16;
+			Task[] tasks;
+			if(m==0)
+			{
+				tasks = new Task[16];
+			}
+			else
+			{
+				tasks = new Task[17];
+			}	
 			double[] solucion;
 			if(iGuess == null)
 			{
@@ -124,11 +133,8 @@ namespace Proyecto
 				}
 				else
 				{
-					int s = l/16;
-					int m = l%16;
 					if(m==0)
 					{
-						Task[] tasks = new Task[16];
 						tasks[0] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*0,s*1,solucion1));
 						tasks[0].Start();
 						tasks[1] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*1,s*2,solucion1));
@@ -165,7 +171,6 @@ namespace Proyecto
 					}
 					else
 					{
-						Task[] tasks = new Task[17];
 						tasks[0] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*0,s*1,solucion1));
 						tasks[0].Start();
 						tasks[1] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*1,s*2,solucion1));
@@ -250,6 +255,17 @@ namespace Proyecto
             Stopwatch stopwatch = new Stopwatch();
 			stopwatch.Start();
 			int l = laMatriz.Length;
+			int s = l/12;
+			int m = l%12;
+			Task[] tasks;
+			if(m==0)
+			{
+				tasks = new Task[12];
+			}
+			else 
+			{
+				tasks = new Task[13];
+			}
 			double[] solucion;
 			if(iGuess == null)
 			{
@@ -272,11 +288,8 @@ namespace Proyecto
 				}
 				else
 				{
-					int s = l/12;
-					int m = l%12;
 					if(m==0)
 					{
-						Task[] tasks = new Task[12];
 						tasks[0] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*0,s*1,solucion1));
 						tasks[0].Start();
 						tasks[1] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*1,s*2,solucion1));
@@ -305,7 +318,6 @@ namespace Proyecto
 					}
 					else
 					{
-						Task[] tasks = new Task[13];
 						tasks[0] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*0,s*1,solucion1));
 						tasks[0].Start();
 						tasks[1] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*1,s*2,solucion1));
