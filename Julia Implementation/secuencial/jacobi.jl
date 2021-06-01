@@ -64,7 +64,7 @@ function jacobi(A, b, x0, tol, maxiter)
         #print(x, rel_diff, "\n")
         x_prev = copy(x)
     end
-    println(x)
+    #println(x)
     return x, rel_diff, k
 end
 

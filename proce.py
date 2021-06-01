@@ -23,7 +23,7 @@ if __name__ == '__main__':
 
     print(num.value)
     print(arr[:])
-    '''
+
 from multiprocessing import Pool, TimeoutError
 import time
 import os
@@ -65,3 +65,10 @@ if __name__ == '__main__':
 
     # exiting the 'with'-block has stopped the pool
     print("Now the pool is closed and no longer available")
+    '''
+
+import numpy as np
+a = np.array([0,1])
+b = np.array([1,0])
+c = np.add(a,b)
+print(c)
