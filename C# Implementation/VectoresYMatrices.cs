@@ -1,9 +1,7 @@
 using System;
-using System.Linq;
-using System.IO;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Threading.Tasks;
+using System.Linq;	//Vector de 0s
+using System.IO; //Lectura de archivos
+using System.Collections.Generic; //Manejo de Listas
 
 namespace Proyecto
 {

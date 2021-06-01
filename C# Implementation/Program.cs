@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.IO;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Threading.Tasks;
 
 namespace Proyecto
 {
@@ -60,14 +55,15 @@ namespace Proyecto
 
 			// -----------------------------------------------------------
 			// Leer desde .txts
-			double[][] p = new double[10000][];
+			double[][] p = new double[5000][];
 			VectoresYMatrices.leerMatriz(p);
 
-			double[] x = new double[10000];
+			double[] x = new double[5000];
 			VectoresYMatrices.leerVector(x);	
 			
 			Jacobi.JacobiMethod(p,x,false,100,0);
 			Jacobi.JacobiMethodParalelPablo(p,x,false,100,0);
+            Jacobi.JacobiMethodParalel(p,x,false,100,0);
 			
 			// //-----------------------------------------------------------
 			// // Creando randoms

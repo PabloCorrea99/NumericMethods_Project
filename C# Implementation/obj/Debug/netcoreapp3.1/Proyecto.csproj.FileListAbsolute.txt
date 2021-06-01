@@ -24,3 +24,16 @@ C:\Users\ricar\Downloads\Videos2021-1\Numerico\NumericMethods_Project\C#\obj\Deb
 C:\Users\ricar\Downloads\Videos2021-1\Numerico\NumericMethods_Project\C#\obj\Debug\netcoreapp3.1\Proyecto.dll
 C:\Users\ricar\Downloads\Videos2021-1\Numerico\NumericMethods_Project\C#\obj\Debug\netcoreapp3.1\Proyecto.pdb
 C:\Users\ricar\Downloads\Videos2021-1\Numerico\NumericMethods_Project\C#\obj\Debug\netcoreapp3.1\Proyecto.genruntimeconfig.cache
+C:\Users\ricar\Downloads\Videos2021-1\Numerico\NumericMethods_Project\C# Implementation\bin\Debug\netcoreapp3.1\Proyecto.exe
+C:\Users\ricar\Downloads\Videos2021-1\Numerico\NumericMethods_Project\C# Implementation\bin\Debug\netcoreapp3.1\Proyecto.deps.json
+C:\Users\ricar\Downloads\Videos2021-1\Numerico\NumericMethods_Project\C# Implementation\bin\Debug\netcoreapp3.1\Proyecto.runtimeconfig.json
+C:\Users\ricar\Downloads\Videos2021-1\Numerico\NumericMethods_Project\C# Implementation\bin\Debug\netcoreapp3.1\Proyecto.runtimeconfig.dev.json
+C:\Users\ricar\Downloads\Videos2021-1\Numerico\NumericMethods_Project\C# Implementation\bin\Debug\netcoreapp3.1\Proyecto.dll
+C:\Users\ricar\Downloads\Videos2021-1\Numerico\NumericMethods_Project\C# Implementation\bin\Debug\netcoreapp3.1\Proyecto.pdb
+C:\Users\ricar\Downloads\Videos2021-1\Numerico\NumericMethods_Project\C# Implementation\obj\Debug\netcoreapp3.1\Proyecto.csprojAssemblyReference.cache
+C:\Users\ricar\Downloads\Videos2021-1\Numerico\NumericMethods_Project\C# Implementation\obj\Debug\netcoreapp3.1\Proyecto.AssemblyInfoInputs.cache
+C:\Users\ricar\Downloads\Videos2021-1\Numerico\NumericMethods_Project\C# Implementation\obj\Debug\netcoreapp3.1\Proyecto.AssemblyInfo.cs
+C:\Users\ricar\Downloads\Videos2021-1\Numerico\NumericMethods_Project\C# Implementation\obj\Debug\netcoreapp3.1\Proyecto.csproj.CoreCompileInputs.cache
+C:\Users\ricar\Downloads\Videos2021-1\Numerico\NumericMethods_Project\C# Implementation\obj\Debug\netcoreapp3.1\Proyecto.dll
+C:\Users\ricar\Downloads\Videos2021-1\Numerico\NumericMethods_Project\C# Implementation\obj\Debug\netcoreapp3.1\Proyecto.pdb
+C:\Users\ricar\Downloads\Videos2021-1\Numerico\NumericMethods_Project\C# Implementation\obj\Debug\netcoreapp3.1\Proyecto.genruntimeconfig.cache
