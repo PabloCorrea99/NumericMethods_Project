@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ricar\\Downloads\\Videos2021-1\\Numerico\\NumericMethods_Project\\C#\\Proyecto.csproj",
+      "projectUniqueName": "C:\\Users\\ricar\\Downloads\\Videos2021-1\\Numerico\\NumericMethods_Project\\C# Implementation\\Proyecto.csproj",
       "projectName": "Proyecto",
-      "projectPath": "C:\\Users\\ricar\\Downloads\\Videos2021-1\\Numerico\\NumericMethods_Project\\C#\\Proyecto.csproj",
+      "projectPath": "C:\\Users\\ricar\\Downloads\\Videos2021-1\\Numerico\\NumericMethods_Project\\C# Implementation\\Proyecto.csproj",
       "packagesPath": "C:\\Users\\ricar\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ricar\\Downloads\\Videos2021-1\\Numerico\\NumericMethods_Project\\C#\\obj\\",
+      "outputPath": "C:\\Users\\ricar\\Downloads\\Videos2021-1\\Numerico\\NumericMethods_Project\\C# Implementation\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\ricar\\AppData\\Roaming\\NuGet\\NuGet.Config",

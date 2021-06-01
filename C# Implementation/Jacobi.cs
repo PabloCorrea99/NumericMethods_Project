@@ -90,7 +90,7 @@ namespace Proyecto
 		/// <returns>Vector con la solucion, que para o por iteracion o por error</returns>
 		public static double[] JacobiMethodParalel(double[][] laMatriz, double[] respuesta, bool imprimir = false, int iterations = 50, double e = 0.02, double[] iGuess = null)
         {
-			if(laMatriz.Length < 10)
+			if(laMatriz.Length < 16)
 			{
 				Console.WriteLine("Jacobi Paralel No es la forma optima de correr el metodo");
 			}
@@ -124,11 +124,11 @@ namespace Proyecto
 				}
 				else
 				{
-					int s = l/10;
-					int m = l%10;
+					int s = l/16;
+					int m = l%16;
 					if(m==0)
 					{
-						Task[] tasks = new Task[10];
+						Task[] tasks = new Task[16];
 						tasks[0] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*0,s*1,solucion1));
 						tasks[0].Start();
 						tasks[1] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*1,s*2,solucion1));
@@ -149,11 +149,23 @@ namespace Proyecto
 						tasks[8].Start();
 						tasks[9] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*9,s*10,solucion1));
 						tasks[9].Start();
+						tasks[10] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*10,s*11,solucion1));
+						tasks[10].Start();
+						tasks[11] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*11,s*12,solucion1));
+						tasks[11].Start();
+						tasks[12] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*12,s*13,solucion1));
+						tasks[12].Start();
+						tasks[13] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*13,s*14,solucion1));
+						tasks[13].Start();
+						tasks[14] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*14,s*15,solucion1));
+						tasks[14].Start();
+						tasks[15] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*15,s*16,solucion1));
+						tasks[15].Start();
 						Task.WaitAll(tasks);				
 					}
 					else
 					{
-						Task[] tasks = new Task[11];
+						Task[] tasks = new Task[17];
 						tasks[0] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*0,s*1,solucion1));
 						tasks[0].Start();
 						tasks[1] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*1,s*2,solucion1));
@@ -174,8 +186,20 @@ namespace Proyecto
 						tasks[8].Start();
 						tasks[9] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*9,s*10,solucion1));
 						tasks[9].Start();
-						tasks[10] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*10,(s*10)+m,solucion1));
+						tasks[10] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*10,s*11,solucion1));
 						tasks[10].Start();
+						tasks[11] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*11,s*12,solucion1));
+						tasks[11].Start();
+						tasks[12] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*12,s*13,solucion1));
+						tasks[12].Start();
+						tasks[13] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*13,s*14,solucion1));
+						tasks[13].Start();
+						tasks[14] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*14,s*15,solucion1));
+						tasks[14].Start();
+						tasks[15] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*15,s*16,solucion1));
+						tasks[15].Start();
+						tasks[16] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*16,(s*16)+m,solucion1));
+						tasks[16].Start();
 						Task.WaitAll(tasks);
 					}
 				}
