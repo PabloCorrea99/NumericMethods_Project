@@ -2,7 +2,7 @@
 
 Implementation of secuential and parallel Jacobi and secuential Gauss-Seidel Method's for solving systems of linear equations using Julia language.
 
-## What Packages do are needed?
+## What Packages are needed?
 
 ### TickTock
 
@@ -19,12 +19,21 @@ Pkg.add("TickTock")
 
 ### Secuentials Methods
 
+1. Jacobi
+
 ```
 julia jacobi.jl
+```
+
+2. Gauss-Seidel
+
+```
 julia gauss-seidel.jl
 ```
 
 ### Parallel Method
+
+1. Jacobi
 
 ```
 julia -t <number of threads> jacobi.jl
