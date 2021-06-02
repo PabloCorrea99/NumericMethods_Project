@@ -2,6 +2,7 @@ using System;
 using System.Linq;	//Vector de 0s
 using System.Diagnostics; // StopWatch
 using System.Threading.Tasks; // Tasks
+using System.IO;
 
 namespace Proyecto
 {
@@ -17,9 +18,10 @@ namespace Proyecto
 		/// <param name="e">Error, si no es colocado el error es de 0.2</param>
 		/// <param name="iGuess">Vector del valor inicial, si no es colocado se ponen un vector 0</param>
 		/// <returns>Vector con la solucion, que para o por iteracion o por error</returns>
-		public static double[] JacobiMethod(double[][] laMatriz, double[] respuesta, bool imprimir = false, int iterations = 50, double e = 0.02, double[] iGuess = null)
+		public static long JacobiMethod(double[][] laMatriz, double[] respuesta, bool imprimir = false, int iterations = 50, double e = 0.02, double[] iGuess = null)
         {
 			Console.WriteLine("Jacobi Empieza");
+			String write = " Jacobi Method iterations ";
 			if(!VectoresYMatrices.sePuedeUsar(laMatriz,respuesta))
 			{
 				Environment.Exit(0);
@@ -55,30 +57,41 @@ namespace Proyecto
                     solucion1[i] = (respuesta[i] - sigma) / laMatriz[i][i];
                 }
 				error = VectoresYMatrices.errorRelativo(solucion,solucion1);
-				if (imprimir)
-                	Console.WriteLine("Step #" + p + ": " + String.Join(", ", solucion1.Select(v => v.ToString()).ToArray())+"\tError: "+ error.ToString());
+				// if (imprimir)
+                // 	Console.WriteLine("Step #" + p + ": " + String.Join(", ", solucion1.Select(v => v.ToString()).ToArray())+"\tError: "+ error.ToString());
 
 				if(error <= e)
 				{
-					Console.WriteLine("Para por criterio error deseado");
-					Console.WriteLine("Step #" + p + ": " + String.Join(", ", solucion1.Select(v => v.ToString()).ToArray())+"\tError: "+ error.ToString());
+					// Console.WriteLine("Para por criterio error deseado");
+					// Console.WriteLine("Step #" + p + ": " + String.Join(", ", solucion1.Select(v => v.ToString()).ToArray())+"\tError: "+ error.ToString());
+					write+=p.ToString();
 					termino = true;
 					break;
 				}
 				VectoresYMatrices.copy(solucion,solucion1);
             }
 			stopwatch.Stop();
+			
 			if (!termino)
-				Console.WriteLine("Step #" + (iterations-1) + ": " + String.Join(", ", solucion1.Select(v => v.ToString()).ToArray())+"\tError: "+ error.ToString());
-			
-			
-			Console.WriteLine("Elapsed Time is {0} ms", stopwatch.ElapsedMilliseconds);
-			
-            return solucion1;
+			{
+				write+=iterations.ToString();
+				// Console.WriteLine("Step #" + (iterations-1) + ": " + String.Join(", ", solucion1.Select(v => v.ToString()).ToArray())+"\tError: "+ error.ToString());
+			}
+				
+			// Console.WriteLine("Elapsed Time is {0} ms", stopwatch.ElapsedMilliseconds);
+
+			write+=" Error: "+error.ToString()+" ["+solucion[laMatriz.Length-2]+","+solucion[laMatriz.Length-1]+"]";
+			write = "Jacobi Elapsed Time in ms: "+ stopwatch.ElapsedMilliseconds + write;
+			StreamWriter streamWriter = new StreamWriter("valores.txt", append: true);
+			streamWriter.WriteLine(write);
+			streamWriter.Close();
+            // return solucion1;
+			return stopwatch.ElapsedMilliseconds;
         }
 
+
 		/// <summary>
-		/// Metodo de Jacobi para solucionar sistemas de ecuaciones lineales	Ax=B
+		/// Metodo de Jacobi para solucionar sistemas de ecuaciones lineales Ax=B 
 		/// </summary>
 		/// <param name="laMatriz">Matriz A</param>
 		/// <param name="respuesta">Vector B</param>
@@ -86,162 +99,7 @@ namespace Proyecto
 		/// <param name="e">Error, si no es colocado el error es de 0.2</param>
 		/// <param name="iGuess">Vector del valor inicial, si no es colocado se ponen un vector 0</param>
 		/// <returns>Vector con la solucion, que para o por iteracion o por error</returns>
-		public static double[] JacobiMethodParalel(double[][] laMatriz, double[] respuesta, bool imprimir = false, int iterations = 50, double e = 0.02, double[] iGuess = null)
-        {
-			if(laMatriz.Length < 16)
-			{
-				Console.WriteLine("Jacobi Paralel No es la forma optima de correr el metodo");
-			}
-            if(!VectoresYMatrices.sePuedeUsar(laMatriz,respuesta))
-			{
-				Environment.Exit(0);
-			}
-			Console.WriteLine("Jacobi Paralel Empieza");
-            Stopwatch stopwatch = new Stopwatch();
-			stopwatch.Start();
-			int l = laMatriz.Length;
-			int s = l/16;
-			int m = l%16;
-			Task[] tasks;
-			if(m==0)
-			{
-				tasks = new Task[16];
-			}
-			else
-			{
-				tasks = new Task[17];
-			}	
-			double[] solucion;
-			if(iGuess == null)
-			{
-				solucion = (Enumerable.Repeat(0.0, respuesta.Length).ToArray());
-			}
-            else
-			{
-				solucion = new double[respuesta.Length];
-				VectoresYMatrices.copy(solucion,iGuess);
-			}
-			double[] solucion1 = new double[respuesta.Length];
-			VectoresYMatrices.copy(solucion1,solucion);
-			double error = 0;
-			bool termino = false;
-            for(int p = 0; p < iterations; p++)
-            {
-				if(laMatriz.Length<10)
-				{
-					Parallel.For(0,laMatriz.Length,delegate(int i){JacobiParalel(laMatriz,solucion,respuesta,i,solucion1);});
-				}
-				else
-				{
-					if(m==0)
-					{
-						tasks[0] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*0,s*1,solucion1));
-						tasks[0].Start();
-						tasks[1] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*1,s*2,solucion1));
-						tasks[1].Start();
-						tasks[2] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*2,s*3,solucion1));
-						tasks[2].Start();
-						tasks[3] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*3,s*4,solucion1));
-						tasks[3].Start();
-						tasks[4] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*4,s*5,solucion1));
-						tasks[4].Start();
-						tasks[5] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*5,s*6,solucion1));
-						tasks[5].Start();
-						tasks[6] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*6,s*7,solucion1));
-						tasks[6].Start();
-						tasks[7] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*7,s*8,solucion1));
-						tasks[7].Start();
-						tasks[8] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*8,s*9,solucion1));
-						tasks[8].Start();
-						tasks[9] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*9,s*10,solucion1));
-						tasks[9].Start();
-						tasks[10] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*10,s*11,solucion1));
-						tasks[10].Start();
-						tasks[11] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*11,s*12,solucion1));
-						tasks[11].Start();
-						tasks[12] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*12,s*13,solucion1));
-						tasks[12].Start();
-						tasks[13] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*13,s*14,solucion1));
-						tasks[13].Start();
-						tasks[14] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*14,s*15,solucion1));
-						tasks[14].Start();
-						tasks[15] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*15,s*16,solucion1));
-						tasks[15].Start();
-						Task.WaitAll(tasks);				
-					}
-					else
-					{
-						tasks[0] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*0,s*1,solucion1));
-						tasks[0].Start();
-						tasks[1] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*1,s*2,solucion1));
-						tasks[1].Start();
-						tasks[2] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*2,s*3,solucion1));
-						tasks[2].Start();
-						tasks[3] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*3,s*4,solucion1));
-						tasks[3].Start();
-						tasks[4] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*4,s*5,solucion1));
-						tasks[4].Start();
-						tasks[5] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*5,s*6,solucion1));
-						tasks[5].Start();
-						tasks[6] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*6,s*7,solucion1));
-						tasks[6].Start();
-						tasks[7] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*7,s*8,solucion1));
-						tasks[7].Start();
-						tasks[8] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*8,s*9,solucion1));
-						tasks[8].Start();
-						tasks[9] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*9,s*10,solucion1));
-						tasks[9].Start();
-						tasks[10] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*10,s*11,solucion1));
-						tasks[10].Start();
-						tasks[11] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*11,s*12,solucion1));
-						tasks[11].Start();
-						tasks[12] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*12,s*13,solucion1));
-						tasks[12].Start();
-						tasks[13] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*13,s*14,solucion1));
-						tasks[13].Start();
-						tasks[14] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*14,s*15,solucion1));
-						tasks[14].Start();
-						tasks[15] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*15,s*16,solucion1));
-						tasks[15].Start();
-						tasks[16] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*16,(s*16)+m,solucion1));
-						tasks[16].Start();
-						Task.WaitAll(tasks);
-					}
-				}
-				error = VectoresYMatrices.errorRelativo(solucion,solucion1);
-				if (imprimir)
-                	Console.WriteLine("Step #" + p + ": " + String.Join(", ", solucion1.Select(v => v.ToString()).ToArray())+"\tError: "+ error.ToString());
-
-				if(error <= e)
-				{
-					Console.WriteLine("Para por criterio error deseado");
-					Console.WriteLine("Step #" + p + ": " + String.Join(", ", solucion1.Select(v => v.ToString()).ToArray())+"\tError: "+ error.ToString());
-					termino = true;
-					break;
-				}
-				VectoresYMatrices.copy(solucion,solucion1);
-            }
-			stopwatch.Stop();
-			if (!termino)
-				Console.WriteLine("Step #" + (iterations-1) + ": " + String.Join(", ", solucion1.Select(v => v.ToString()).ToArray())+"\tError: "+ error.ToString());
-			
-			
-			Console.WriteLine("Elapsed Time is {0} ms", stopwatch.ElapsedMilliseconds);
-			
-            return solucion1;
-        }
-
-
-		/// <summary>
-		/// Metodo de Jacobi para solucionar sistemas de ecuaciones lineales	Ax=B usando el PC de Pablo
-		/// </summary>
-		/// <param name="laMatriz">Matriz A</param>
-		/// <param name="respuesta">Vector B</param>
-		/// <param name="iterations">Numero de iteraciones, si no es colocado son 50 iteracions</param>
-		/// <param name="e">Error, si no es colocado el error es de 0.2</param>
-		/// <param name="iGuess">Vector del valor inicial, si no es colocado se ponen un vector 0</param>
-		/// <returns>Vector con la solucion, que para o por iteracion o por error</returns>
-		public static double[] JacobiMethodParalelPablo(double[][] laMatriz, double[] respuesta, bool imprimir = false, int iterations = 50, double e = 0.02, double[] iGuess = null)
+		public static long JacobiMethodParalel(double[][] laMatriz, double[] respuesta, bool imprimir = false, int iterations = 50, double e = 0.02, double[] iGuess = null)
         {
 			if(laMatriz.Length < 11)
 			{
@@ -251,7 +109,8 @@ namespace Proyecto
 			{
 				Environment.Exit(0);
 			}
-			Console.WriteLine("Jacobi Paralel Pablo Empieza");
+			Console.WriteLine("Jacobi Paralel Empieza");
+			String write = " Jacobi Paralel iterations ";
             Stopwatch stopwatch = new Stopwatch();
 			stopwatch.Start();
 			int l = laMatriz.Length;
@@ -282,7 +141,7 @@ namespace Proyecto
 			bool termino = false;
             for(int p = 0; p < iterations; p++)
             {
-				if(laMatriz.Length<10)
+				if(laMatriz.Length<12)
 				{
 					Parallel.For(0,laMatriz.Length,delegate(int i){JacobiParalel(laMatriz,solucion,respuesta,i,solucion1);});
 				}
@@ -348,13 +207,14 @@ namespace Proyecto
 					}
 				}
 				error = VectoresYMatrices.errorRelativo(solucion,solucion1);
-				if (imprimir)
-                	Console.WriteLine("Step #" + p + ": " + String.Join(", ", solucion1.Select(v => v.ToString()).ToArray())+"\tError: "+ error.ToString());
+				// if (imprimir)
+                // 	Console.WriteLine("Step #" + p + ": " + String.Join(", ", solucion1.Select(v => v.ToString()).ToArray())+"\tError: "+ error.ToString());
 
 				if(error <= e)
 				{
-					Console.WriteLine("Para por criterio error deseado");
-					Console.WriteLine("Step #" + p + ": " + String.Join(", ", solucion1.Select(v => v.ToString()).ToArray())+"\tError: "+ error.ToString());
+					// Console.WriteLine("Para por criterio error deseado");
+					// Console.WriteLine("Step #" + p + ": " + String.Join(", ", solucion1.Select(v => v.ToString()).ToArray())+"\tError: "+ error.ToString());
+					write+=p.ToString();
 					termino = true;
 					break;
 				}
@@ -362,12 +222,23 @@ namespace Proyecto
             }
 			stopwatch.Stop();
 			if (!termino)
-				Console.WriteLine("Step #" + (iterations-1) + ": " + String.Join(", ", solucion1.Select(v => v.ToString()).ToArray())+"\tError: "+ error.ToString());
+			{
+				write+=iterations.ToString();
+				// Console.WriteLine("Step #" + (iterations-1) + ": " + String.Join(", ", solucion1.Select(v => v.ToString()).ToArray())+"\tError: "+ error.ToString());
+			}
+				
 			
 			
-			Console.WriteLine("Elapsed Time is {0} ms", stopwatch.ElapsedMilliseconds);
+			// Console.WriteLine("Elapsed Time is {0} ms", stopwatch.ElapsedMilliseconds);
 			
-            return solucion1;
+			write+=" Error: "+error.ToString()+" ["+solucion[laMatriz.Length-2]+","+solucion[laMatriz.Length-1]+"]";
+			write = "Jacobi Elapsed Time in ms: "+ stopwatch.ElapsedMilliseconds + write;
+			StreamWriter streamWriter = new StreamWriter("valores.txt", append: true);
+			streamWriter.WriteLine(write);
+			streamWriter.Close();
+            // return solucion1;
+			
+			return stopwatch.ElapsedMilliseconds;
         }
 
 		/// <summary>
