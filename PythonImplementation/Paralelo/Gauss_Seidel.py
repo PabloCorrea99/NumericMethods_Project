@@ -1,7 +1,7 @@
 import numpy as np
 import time
-from ReadData import readMatrix, readVector
-
+from .ReadData import readMatrix, readVector
+from multiprocessing import Pool
 '''
 Método que calcula la solución a un sistema de ecuaciones lineales por medio del método iterativo de Gauss-Seidel.
 Entradas: Matriz Diagonalmente Dominante A, vector independiente b, tolerancia y maximo de iteraciones.
@@ -30,10 +30,21 @@ def gauss_seidel(A, b, tolerance=1e-10, max_iterations=100):
     total = t1-t0
     print(total)        
     return x
+    
+def start():
 
-#Se crea la matriz A
-matrixA = readMatrix()
-#Se crea el vector b
-vectorB = readVector()
-x = gauss_seidel(matrixA, vectorB)
-print(x)
+    with Pool(processes=2) as pool:
+
+        #Se crea la matriz A
+        matrix = pool.apply_async(readMatrix,())
+        
+        # Se crea el vector B
+        vector = pool.apply_async(readVector,())
+        matrix.wait(50)
+        vector.wait(5)
+        A = matrix.get()
+        b = vector.get()
+
+
+        x = gauss_seidel(A, b)
+        print(x)
