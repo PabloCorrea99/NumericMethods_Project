@@ -1,13 +1,14 @@
 using LinearAlgebra
 using TickTock
+using ArgParse
 
 """
-    read_matrix_A()
+    read_matrix_A(path)
 
 Perform the reading of the matrix and create the data structure.
 """
-function read_matrix_A()
-    stream = open("C:/Users/s8pul/Downloads/numeric/matriz.txt", "r")
+function read_matrix_A(path)
+    stream = open(path, "r")
 
     line_count = 1
     A = Array{Float64}(undef, 10000, 10000)
@@ -27,12 +28,12 @@ function read_matrix_A()
 end
 
 """
-    read_vector_b()
+    read_vector_b(path)
 
 Perform the reading of the vector and create the data structure.
 """
-function read_vector_b()
-    stream = open("C:/Users/s8pul/Downloads/numeric/vector.txt")
+function read_vector_b(path)
+    stream = open(path, "r")
 
     b = Array{Float64}(undef, 10000)
 
@@ -82,10 +83,32 @@ function jacobi(A, b, x0, tol, maxiter)
     return x, rel_diff, k
 end
 
+"""
+    parse_commandline()
+
+Perform the reading of the arguments passed to the file.
+"""
+function parse_commandline()
+    s = ArgParseSettings()
+
+    @add_arg_table s begin
+        "--apath", "-a"
+            help = "The path to file that contains Matrix A"
+            required = true
+        "--bpath", "-b"
+            help = "The path to file that contains Vector b"
+            required = true
+    end
+
+    return parse_args(s)
+end
+
+parsed_args = parse_commandline()
+
 println("Started reading the file")
 
-A = read_matrix_A()
-b = read_vector_b()
+A = read_matrix_A(parsed_args["apath"])
+b = read_vector_b(parsed_args["bpath"])
 
 x0 = zeros(10000)
 
