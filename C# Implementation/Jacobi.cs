@@ -8,7 +8,6 @@ namespace Proyecto
 {
     class Jacobi
     {
-
         /// <summary>
 		/// Metodo de Jacobi para solucionar sistemas de ecuaciones lineales	Ax=B
 		/// </summary>
@@ -227,12 +226,10 @@ namespace Proyecto
 				// Console.WriteLine("Step #" + (iterations-1) + ": " + String.Join(", ", solucion1.Select(v => v.ToString()).ToArray())+"\tError: "+ error.ToString());
 			}
 				
-			
-			
 			// Console.WriteLine("Elapsed Time is {0} ms", stopwatch.ElapsedMilliseconds);
 			
 			write+=" Error: "+error.ToString()+" ["+solucion[laMatriz.Length-2]+","+solucion[laMatriz.Length-1]+"]";
-			write = "Jacobi Elapsed Time in ms: "+ stopwatch.ElapsedMilliseconds + write;
+			write = "Jacobi Paralel Elapsed Time in ms: "+ stopwatch.ElapsedMilliseconds + write;
 			StreamWriter streamWriter = new StreamWriter("valores.txt", append: true);
 			streamWriter.WriteLine(write);
 			streamWriter.Close();
