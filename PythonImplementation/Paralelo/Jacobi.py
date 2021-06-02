@@ -24,10 +24,10 @@ def start(direccionA, direccionB, tolerancia, iteraciones):
     with Pool(processes=2) as pool:
 
         #Se crea la matriz A
-        matrix = pool.apply_async(readMatrix,())
+        matrix = pool.apply_async(readMatrix,(direccionA,))
             
         # Se crea el vector B
-        vector = pool.apply_async(readVector,())
+        vector = pool.apply_async(readVector,(direccionB,))
         matrix.wait(50)
         vector.wait(5)
         A = matrix.get()
