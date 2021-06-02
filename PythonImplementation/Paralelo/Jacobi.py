@@ -3,6 +3,7 @@ import numpy as np
 from ReadData import readMatrix, readVector
 import time
 import threading
+from multiprocessing import Pool
 
 '''
 Método que calcula (haciendo uso del paralelismo) la solución a un sistema de ecuaciones lineales por medio del método iterativo de Jacobi.
@@ -21,65 +22,72 @@ def jacobi(A, b, c, n, m):
     
 
 if __name__ == '__main__':
-    #Se crea la matriz A
-    A = readMatrix()
 
-    # initialize the RHS vector
-    b = readVector()
-    x = np.zeros_like(b, dtype=np.double)
+    with Pool(processes=2) as pool:
 
-    tolerance=1e-10
-    max_iterations=500
-    t0 = time.time()
-    bloques = int(len(A[0]))/10
-
-    if (len(A[0])%10 == 0):
-        hilos = 10
-
-    elif (len(A[0])<10):
-        hilos = 1
+        #Se crea la matriz A
+        matrix = pool.apply_async(readMatrix,())
         
+        # Se crea el vector B
+        vector = pool.apply_async(readVector,())
+        matrix.wait(50)
+        vector.wait(5)
+        A = matrix.get()
+        b = vector.get()
+        x = np.zeros_like(b, dtype=np.double)
 
-    elif (len(A[0])==1):
-        print("No es una matriz")
-        exit(1)
+        tolerance=1e-10
+        max_iterations=500
+        t0 = time.time()
+        bloques = int(len(A[0]))/10
+
+        if (len(A[0])%10 == 0):
+            hilos = 10
+
+        elif (len(A[0])<10):
+            hilos = 1
+            
+
+        elif (len(A[0])==1):
+            print("No es una matriz")
+            exit(1)
+            
+        else:
+            hilos = 11
         
-    else:
-        hilos = 11
+        for k in range(max_iterations):
+            x_old = x.copy()
+            list_threads = []
+            i=0
+            j=1
+            #Numero Maximo de Procesos es p-1, Ya que la maquina cuenta con 12 procesadores logicos
+            for num_thread in range(1, hilos+1):
+                if( num_thread == 11 ):
+                    t = threading.Thread(target=jacobi, args=(A,b,x,int(bloques*j),len(A[0]),))
+                    list_threads.append(t)
+                    t.start()
+                elif(len(A[0])<10):
+                    t = threading.Thread(target=jacobi, args=(A,b,x,0,len(A[0]),))
+                    list_threads.append(t)
+                    t.start()
+                    break
+                else:
+                    t = threading.Thread(target=jacobi, args=(A,b,x,int(bloques*i),int(bloques*j),))
+                    list_threads.append(t)
+                    t.start()
+                i+=1
+                j+=1
+            
 
-    for k in range(max_iterations):
-        x_old = x.copy()
-        list_threads = []
-        i=0
-        j=1
-        #Numero Maximo de Procesos es p-1, Ya que la maquina cuenta con 12 procesadores logicos
-        for num_thread in range(1, hilos+1):
-            if( num_thread == 11 ):
-                t = threading.Thread(target=jacobi, args=(A,b,x,int(bloques*j),len(A[0]),))
-                list_threads.append(t)
-                t.start()
-            elif(len(A[0])<10):
-                t = threading.Thread(target=jacobi, args=(A,b,x,0,len(A[0]),))
-                list_threads.append(t)
-                t.start()
+            for t in list_threads:
+                t.join() #Termina los procesos de cada procesador       
+
+            if np.linalg.norm(x - x_old, ord=np.inf) / np.linalg.norm(x, ord=np.inf) < tolerance: #se verifica la tolerancia para ver si hubo convergencia
                 break
-            else:
-                t = threading.Thread(target=jacobi, args=(A,b,x,int(bloques*i),int(bloques*j),))
-                list_threads.append(t)
-                t.start()
-            i+=1
-            j+=1
-        
-
-        for t in list_threads:
-            t.join() #Termina los procesos de cada procesador       
-
-        if np.linalg.norm(x - x_old, ord=np.inf) / np.linalg.norm(x, ord=np.inf) < tolerance: #se verifica la tolerancia para ver si hubo convergencia
-            break
 
 
-    t1 = time.time()     
-    total = t1-t0
-    print(total)     
-    print(x)
+        t1 = time.time()     
+        total = t1-t0
+        print(total)     
+        print(x)
         
