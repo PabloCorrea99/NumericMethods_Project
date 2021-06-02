@@ -18,7 +18,7 @@ def jacobi(A, b, tolerance=1e-10, max_iterations=500):
         
         x_old  = x.copy() #Se copia la x vieja para el calculo de la convergencia
         
-        x[:] = (b - np.dot(T, x)) / np.diagonal(A) #Se calcula el x -> b-suma/aii 
+        x = (b - np.dot(T, x)) / np.diagonal(A) #Se calcula el x -> b-suma/aii 
         
         if np.linalg.norm(x - x_old, ord=np.inf) / np.linalg.norm(x, ord=np.inf) < tolerance: #se verifica la tolerancia para ver si hubo convergencia
             break
