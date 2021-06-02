@@ -1,7 +1,13 @@
 using LinearAlgebra
+using TickTock
 
+"""
+    read_matrix_A()
+
+Perform the reading of the matrix and create the data structure.
+"""
 function read_matrix_A()
-    stream = open("C:/Users/Usuario/Desktop/Universidad/7 SEMESTRE/NumericMethods_Project/matriz.txt", "r")
+    stream = open("C:/Users/s8pul/Downloads/numeric/matriz.txt", "r")
 
     line_count = 1
     A = Array{Float64}(undef, 10000, 10000)
@@ -20,8 +26,13 @@ function read_matrix_A()
     close(stream)
 end
 
+"""
+    read_vector_b()
+
+Perform the reading of the vector and create the data structure.
+"""
 function read_vector_b()
-    stream = open("C:/Users/Usuario/Desktop/Universidad/7 SEMESTRE/NumericMethods_Project/vector.txt", "r")
+    stream = open("C:/Users/s8pul/Downloads/numeric/vector.txt")
 
     b = Array{Float64}(undef, 10000)
 
@@ -33,16 +44,17 @@ function read_vector_b()
     close(stream)
 end
 
+"""
+    gauss_seidel(A, b, x0, tol, maxiter)
+
+Perform a series of iterations to solve the system of linear equations,
+Ax = b, starting from an initial assumption, x0.
+
+The algorithm has as its stopping point when the change in x is less than tolerance,
+or if the maximum number of iterations has been exceeded.
+"""
 function gauss_seidel(A, b, x0, tol, maxiter)
-    #=
-    Realiza una serie de iteraciones para resolver el sistema de ecuaciones lineales,
-    Ax = b, partiendo desde una suposicion inicial, x0.
-
-    El algoritmo tiene como punto de parada cuando el cambio en x es menor que 'tol',
-    o si se ha superado el numero maximo de iteraciones.
-    =#
-
-    print("Starting Gauss-Seidel Method, this calculate x based on A, b and x0\n")
+    tick()
 
     n = size(A)[1]
     x = copy(x0)
@@ -63,34 +75,32 @@ function gauss_seidel(A, b, x0, tol, maxiter)
             end  
             x[i] = (b[i] - subs) / A[i,i]
         end
-        k += 1
 
-        rel_diff = norm(x - x_prev) / norm(x)
-        #= print("k=", k, " ")
-        print("x[", k, "]=", x, " ")
-        print("rel_diff=", rel_diff, "\n") =#
+        rel_diff = norm(x - x_prev)
         x_prev = copy(x)
+        k += 1
     end
-    print("Criteria met!\nEnding Gauss-Seidel Method.\n")
+
+    tock()
     return x, rel_diff, k
 end
 
-println("Empezo Lectura")
+println("Started reading the file")
 
 A = read_matrix_A()
 b = read_vector_b()
 
 x0 = zeros(10000)
 
-println("Termino Lectura")
+println("Finished reading the file")
 
 tol = 0.00001
 maxiter = 100
 
-@time x, rel_diff, k = gauss_seidel(A, b, x0, tol, maxiter)
+x, rel_diff, k = gauss_seidel(A, b, x0, tol, maxiter)
 
 if k == maxiter
     print("WARNING: the gauss seidel iterations did not converge within the required tolerance. \n")
 end
 
-#print(x, rel_diff, k)
+print(x, rel_diff, k)
