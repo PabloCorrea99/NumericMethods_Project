@@ -1,15 +1,14 @@
-using Distributed
-using SharedArrays
+using Base.Threads
 using LinearAlgebra
-using BenchmarkTools
-addprocs(16)
+using TickTock
 
-@everywhere using Distributed
-@everywhere using SharedArrays
-@everywhere using LinearAlgebra
+"""
+    read_matrix_A()
 
+Perform the reading of the matrix and create the data structure.
+"""
 function read_matrix_A()
-    stream = open("C:/Users/Usuario/Desktop/Universidad/7 SEMESTRE/NumericMethods_Project/matriz.txt", "r")
+    stream = open("C:/Users/s8pul/Downloads/numeric/matriz.txt", "r")
 
     line_count = 1
     A = Array{Float64}(undef, 10000, 10000)
@@ -28,8 +27,13 @@ function read_matrix_A()
     close(stream)
 end
 
+"""
+    read_vector_b()
+
+Perform the reading of the vector and create the data structure.
+"""
 function read_vector_b()
-    stream = open("C:/Users/Usuario/Desktop/Universidad/7 SEMESTRE/NumericMethods_Project/vector.txt")
+    stream = open("C:/Users/s8pul/Downloads/numeric/vector.txt")
 
     b = Array{Float64}(undef, 10000)
 
@@ -41,60 +45,88 @@ function read_vector_b()
     close(stream)
 end
 
-println("Empezo la lectura")
+"""
+    jacobi_task(A, b, x, x_prev, lower_limit, upper_limit)
 
-a = read_matrix_A()
-a = SharedMatrix(a)
+Perform a series of jacobi iterations for the specified range of the A matrix.
+"""
+function jacobi_task(A, b, x, x_prev, lower_limit, upper_limit)
+    for i=lower_limit:upper_limit
+        subs = 0.0
+        for j in 1:size(A)[1]
+            if (j != i)
+                subs += A[i,j] * x_prev[j]
+            end
+        end
+        x[i] = (b[i] - subs) / A[i,i]
+    end
+end
 
-b = read_vector_b()
-b = SharedVector(b)
+"""
+    jacobi(A, b, x0, tol, maxiter)
 
-x_prev = zeros(size(a)[1])
-x_prev = SharedVector(x_prev)
+Perform a series of iterations using multiple threads to solve the system of linear equations,
+Ax = b, starting from an initial assumption, x0.
 
-x = zeros(size(a)[1])
-x = SharedVector(x)
+The algorithm has as its stopping point when the change in x is less than tolerance,
+or if the maximum number of iterations has been exceeded.
+"""
+function jacobi(A, b, x0, tol, maxiter)
+    tick()
 
-println("Termino la lectura")
+        n = size(A)[1]
+        x = copy(x0)
+        x_prev = copy(x0)
+        k = 0
+        rel_diff = tol * 2
+        num_threads = Threads.nthreads()
+        col_mapping = Int(floor(n/num_threads))
+        rem = n%num_threads
 
-col_asign = convert(UInt64, (size(a)[1])/nworkers())
+        while (rel_diff > tol) && (k < maxiter)
 
-rel_diff = 0.0
-
-function prueba()
-    @sync @distributed for t in 0:nworkers()-1
-        for i=(t*col_asign)+1:(t*col_asign)+col_asign
-            subs = 0.0
-            for j in 1:size(a)[1]
-                if (j != i)
-                    subs += a[i,j] * x_prev[j]
+            if rem == 0
+                @threads for j in 0:(Threads.nthreads())-1
+                    jacobi_task(A, b, x, x_prev, (j*col_mapping)+1, (j*col_mapping)+col_mapping)
+                end
+            else 
+                @threads for j in 0:(Threads.nthreads())-2
+                    jacobi_task(A, b, x, x_prev, (j*col_mapping)+1, (j*col_mapping)+col_mapping)
+                end
+                @threads for _ in 1:1
+                    jacobi_task(A, b, x, x_prev, ((num_threads-1)*col_mapping)+1, ((num_threads-1)*col_mapping)+col_mapping+rem)
                 end
             end
-            x[i] = (b[i] - subs) / a[i,i]
+        
+            rel_diff = norm(x - x_prev)
+            x_prev = copy(x)
+            k += 1
         end
-    end
+
+    tock()
+    print(k)
+    return x, rel_diff, k
 end
 
-function main()
+println("Running with: $(Threads.nthreads()) Threads")
 
-    tol = 0.00001
-    maxiter = 100
+println("Started reading the file")
 
-    rel_diff = 2*tol
-    k = 0
+A = read_matrix_A()
 
-    while (rel_diff > tol) && (k < maxiter)
-        prueba()
-        #print(x)
-        rel_diff = norm(x - x_prev)
-        #println(rel_diff)
-        global x_prev
-        x_prev = copy(x)
-        k += 1
-    end
-    #= print(k)
-    print(x)
-    println(rel_diff) =#
+b = read_vector_b()
+
+x0 = zeros(10000)
+
+println("Finished reading the file")
+
+tol = 0.00001
+maxiter = 100
+
+x, rel_diff, k = jacobi(A, b, x0, tol, maxiter)
+
+if k == maxiter
+    print("WARNING: the jacobi iterations did not converge within the required tolerance. \n")
 end
 
-@btime main()
+print(x, rel_diff, k)
