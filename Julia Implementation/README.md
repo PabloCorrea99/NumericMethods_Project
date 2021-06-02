@@ -4,7 +4,7 @@ Implementation of secuential and parallel Jacobi and secuential Gauss-Seidel Met
 
 ## What Packages do are needed?
 
-1. TickTock
+### TickTock
 
 This package is for measuring the execution time of each method.
 
@@ -17,14 +17,14 @@ Pkg.add("TickTock")
 
 ## How to run it?
 
-1. Secuentials Methods
+### Secuentials Methods
 
 ```
 julia jacobi.jl
 julia gauss-seidel.jl
 ```
 
-2. Parallel Method
+### Parallel Method
 
 ```
 julia -t <number of threads> jacobi.jl
