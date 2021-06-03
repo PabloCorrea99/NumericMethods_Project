@@ -11,9 +11,14 @@ Perform the reading of the matrix and create the data structure.
 function read_matrix_A(path)
     stream = open(path, "r")
 
+    total_lines = length(readlines(stream))
     line_count = 1
-    A = Array{Float64}(undef, 10000, 10000)
+    A = Array{Float64}(undef, total_lines, total_lines)
+
+    close(stream)
     
+    stream = open(path, "r")
+
     while ! eof(stream)
         line = readline(stream)
         values = split(line, ",")
@@ -36,9 +41,15 @@ Perform the reading of the vector and create the data structure.
 function read_vector_b(path)
     stream = open(path, "r")
 
-    b = Array{Float64}(undef, 10000)
-
     line = readline(stream)
+    vector_size = split(line)
+
+    close(stream)
+
+    stream = open(path, "r")
+
+    b = Array{Float64}(undef, length(vector_size))
+
     b = map(x->parse(Float64, x), split(line, ","))
 
     return b
@@ -139,7 +150,7 @@ A = read_matrix_A(parsed_args["apath"])
 
 b = read_vector_b(parsed_args["bpath"])
 
-x0 = zeros(10000)
+x0 = zeros(length(b))
 
 println("Finished reading the file")
 
