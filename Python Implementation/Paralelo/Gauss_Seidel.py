@@ -8,7 +8,7 @@ Entradas: Matriz Diagonalmente Dominante A, vector independiente b, tolerancia y
 Salida: Vector de solución x.
 '''
 
-def gauss_seidel(A, b, tolerance=1e-10, max_iterations=100):
+def gauss_seidel(A, b, tolerance, max_iterations):
     t0 = time.time()
     x = np.zeros_like(b, dtype=np.double)
     
@@ -30,21 +30,21 @@ def gauss_seidel(A, b, tolerance=1e-10, max_iterations=100):
     total = t1-t0
     print(total)        
     return x
-    
-def start():
+
+def start(direccionA, direccionB, tolerancia=1e-10, iteraciones=500):
 
     with Pool(processes=2) as pool:
 
         #Se crea la matriz A
-        matrix = pool.apply_async(readMatrix,())
+        matrix = pool.apply_async(readMatrix,(direccionA,))
         
         # Se crea el vector B
-        vector = pool.apply_async(readVector,())
+        vector = pool.apply_async(readVector,(direccionB,))
         matrix.wait(50)
         vector.wait(5)
         A = matrix.get()
         b = vector.get()
 
 
-        x = gauss_seidel(A, b)
+        x = gauss_seidel(A, b, float(tolerancia), int(iteraciones))
         print(x)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace Proyecto
 {
@@ -53,18 +54,82 @@ namespace Proyecto
 
             // Jacobi.JacobiMethod(JA, JB,false,100,0);
 
-			// -----------------------------------------------------------
-			// Leer desde .txts
-			double[][] p = new double[5000][];
-			VectoresYMatrices.leerMatriz(p);
+			// // -----------------------------------------------------------
+			// // Leer desde .txts
+			// double[][] p = new double[5000][];
+			// VectoresYMatrices.leerMatriz(p);
 
-			double[] x = new double[5000];
-			VectoresYMatrices.leerVector(x);	
-			
-			Jacobi.JacobiMethod(p,x,false,100,0);
-			Jacobi.JacobiMethodParalelPablo(p,x,false,100,0);
-            Jacobi.JacobiMethodParalel(p,x,false,100,0);
-			
+			// double[] x = new double[5000];
+			// VectoresYMatrices.leerVector(x);
+
+            // Jacobi.JacobiMethod(p,x,false,100,0.000001);
+            // Jacobi.JacobiMethodParalel(p,x,false,100,0.000001);
+
+            // // -----------------------------------------------------------
+			// // Consola
+            Console.WriteLine("Escriba el path del vector");
+            String pathVector = Console.ReadLine();
+            Console.WriteLine("Escriba el path del Matriz");
+            String pathMatriz = Console.ReadLine();
+            Console.WriteLine("Escriba tamaño vector");
+            int num = Convert.ToInt32(Console.ReadLine());
+
+			double[][] p = new double[num][];
+			VectoresYMatrices.leerMatriz(p,pathMatriz);
+
+			double[] x = new double[num];
+			VectoresYMatrices.leerVector(x,pathVector);
+
+            Console.WriteLine("Escriba 0 para Jacobi u otro numero para Gauss-Seidel");
+            int metodo = Convert.ToInt32(Console.ReadLine());
+            string s,m;
+            if(metodo==0)
+            {            
+                for(int i = 0; i<10;i++)
+                {
+                    s = Jacobi.JacobiMethod(p,x,false,100,0.000001).ToString();
+                    m = Jacobi.JacobiMethodParalel(p,x,false,100,0.000001).ToString();
+                    StreamWriter puntos = new StreamWriter("valoresPuntos.csv", append: true);
+                    s = "Jacobi Method #," +i.ToString()+ "," + s;
+                    m = "Jacobi Paralelo #," +i.ToString()+ "," + m;
+                    puntos.WriteLine(s);
+                    puntos.WriteLine(m);
+                    puntos.Close();
+                }
+            }
+            else
+            {
+                GaussSeidel.GaussSeidelMethod(p, x, false,100);
+            }
+            // Console.WriteLine("Escriba el error");
+            // double error = Convert.ToDouble(Console.ReadLine());
+
+            // -----------------------------------------------------------
+			// Leer desde .txts
+            
+			// double[][] p = new double[5000][];
+			// double[] x = new double[5000];
+
+            // for(int j= 1;j<6;j++)
+            // {
+            //     StreamWriter streamWriter = new StreamWriter("valores.txt", append: true);
+            //     streamWriter.WriteLine("Jacobi #"+j.ToString());
+            //     streamWriter.Close();
+			//     VectoresYMatrices.leerMatriz(p,"C:\\numeric\\numeric5000-"+j.ToString()+"\\matriz.txt");
+			//     VectoresYMatrices.leerVector(x,"C:\\numeric\\numeric5000-"+j.ToString()+"\\vector.txt");
+            //     String s,m;
+            //     for(int i = 0; i<10;i++)
+            //     {
+            //         s = Jacobi.JacobiMethod(p,x,false,100,0.000001).ToString();
+            //         m = Jacobi.JacobiMethodParalel(p,x,false,100,0.000001).ToString();
+            //         StreamWriter puntos = new StreamWriter("valoresPuntos.csv", append: true);
+            //         s = "Jacobi Method #," +j.ToString()+ ","+i.ToString()+ "," + s;
+            //         m = "Jacobi Paralelo #," +j.ToString()+ ","+i.ToString()+ "," + m;
+            //         puntos.WriteLine(s);
+            //         puntos.WriteLine(m);
+            //         puntos.Close();
+            //     }
+            // }
 			// //-----------------------------------------------------------
 			// // Creando randoms
 
@@ -80,14 +145,14 @@ namespace Proyecto
 			// //-----------------------------------------------------------
 			// // Creando randoms y guardarlos en los .txt
 
-			// double[][] p = new double[100][];
+			// double[][] p = new double[500][];
 			// VectoresYMatrices.crearMatrizRandomDominante(p,20);
-			// VectoresYMatrices.escribirMatriz(p);
+			// VectoresYMatrices.escribirMatriz(p,"matriz.txt");
 			// Console.WriteLine(VectoresYMatrices.esDominante(p));
 
-			// double[] x = new double[100];
+			// double[] x = new double[500];
 			// VectoresYMatrices.crearVectorRandom(x,20);
-			// VectoresYMatrices.escribirVector(x);
+			// VectoresYMatrices.escribirVector(x,"vector.txt");
 
         }
     }
