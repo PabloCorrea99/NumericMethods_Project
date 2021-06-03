@@ -45,5 +45,5 @@ def start(direccionA, direccionB, tolerancia=1e-10, iteraciones=500):
         for i in range(0,10):
             result = jacobi(A, b, float(tolerancia), int(iteraciones))
             f = open("valoresPuntoPy.csv", "a")
-            f.write("Jacobi HPC #,"+i+","+result+"\n")
+            f.write("Jacobi HPC #,"+str(i)+","+str(result)+"\n")
             f.close()

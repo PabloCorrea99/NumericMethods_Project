@@ -49,5 +49,5 @@ def start(direccionA, direccionB, tolerancia=1e-10, iteraciones=500):
         for i in range(0,10):
             result = gauss_seidel(A, b, float(tolerancia), int(iteraciones))
             f = open("valoresPuntoPy.csv", "a")
-            f.write("Gauss-Seidel #,"+i+","+result+"\n")
+            f.write("Gauss-Seidel #,"+str(i)+","+str(result)+"\n")
             f.close()
