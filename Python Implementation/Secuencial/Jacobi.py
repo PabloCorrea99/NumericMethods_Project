@@ -27,8 +27,9 @@ def jacobi(a, b, x, tolerance, kmax):
             break
     t1 = time.time()     
     total = t1-t0
-    print(total)   
-    return x
+    print(total)
+    return total   
+    # return x
 
 def start(direccionA, direccionB, tolerancia=1e-10, iteraciones=500):
     #Se crea la matriz A
@@ -37,6 +38,8 @@ def start(direccionA, direccionB, tolerancia=1e-10, iteraciones=500):
     #Se crea el vector independiente b
     b = readVector(direccionB)
     x = np.zeros_like(b, dtype=np.double)
-    result = jacobi(A,b,x, float(tolerancia), int(iteraciones))
-    print(result)
-
+    for i in range(0,10):
+        result = jacobi(A,b,x, float(tolerancia), int(iteraciones))
+        f = open("valoresPuntoPy.csv", "a")
+        f.write("Jacobi #,"+i+","+result+"\n")
+        f.close()

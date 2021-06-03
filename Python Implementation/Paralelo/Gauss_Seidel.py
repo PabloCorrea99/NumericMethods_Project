@@ -29,7 +29,8 @@ def gauss_seidel(A, b, tolerance, max_iterations):
 
     total = t1-t0
     print(total)        
-    return x
+    # return x
+    return total
 
 def start(direccionA, direccionB, tolerancia=1e-10, iteraciones=500):
 
@@ -45,6 +46,8 @@ def start(direccionA, direccionB, tolerancia=1e-10, iteraciones=500):
         A = matrix.get()
         b = vector.get()
 
-
-        x = gauss_seidel(A, b, float(tolerancia), int(iteraciones))
-        print(x)
+        for i in range(0,10):
+            result = gauss_seidel(A, b, float(tolerancia), int(iteraciones))
+            f = open("valoresPuntoPy.csv", "a")
+            f.write("Gauss-Seidel #,"+i+","+result+"\n")
+            f.close()

@@ -88,4 +88,5 @@ def start(direccionA, direccionB, tolerancia, iteraciones):
             total = t1-t0
             print(total)     
             print(x)
+            return total
         

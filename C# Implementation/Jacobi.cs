@@ -100,7 +100,7 @@ namespace Proyecto
 		/// <returns>Vector con la solucion, que para o por iteracion o por error</returns>
 		public static long JacobiMethodParalel(double[][] laMatriz, double[] respuesta, bool imprimir = false, int iterations = 50, double e = 0.02, double[] iGuess = null)
         {
-			if(laMatriz.Length < 11)
+			if(laMatriz.Length < 12)
 			{
 				Console.WriteLine("Jacobi Paralel No es la forma optima de correr el metodo");
 			}
@@ -115,15 +115,7 @@ namespace Proyecto
 			int l = laMatriz.Length;
 			int s = l/12;
 			int m = l%12;
-			Task[] tasks;
-			if(m==0)
-			{
-				tasks = new Task[12];
-			}
-			else 
-			{
-				tasks = new Task[13];
-			}
+			Task[] tasks = new Task[12];
 			double[] solucion;
 			if(iGuess == null)
 			{
@@ -198,10 +190,8 @@ namespace Proyecto
 						tasks[9].Start();
 						tasks[10] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*10,s*11,solucion1));
 						tasks[10].Start();
-						tasks[11] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*11,s*12,solucion1));
+						tasks[11] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*11,(s*12)+m,solucion1));
 						tasks[11].Start();
-						tasks[12] = new Task(()=> JacobiParalelTask(laMatriz,solucion,respuesta,s*12,(s*12)+m,solucion1));
-						tasks[12].Start();
 						Task.WaitAll(tasks);
 					}
 				}

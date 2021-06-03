@@ -26,7 +26,8 @@ def jacobi(A, b, tolerance, max_iterations):
     t1 = time.time()     
     total = t1-t0
     print(total)     
-    return x
+    # return x
+    return total
 
 
 def start(direccionA, direccionB, tolerancia=1e-10, iteraciones=500):
@@ -41,5 +42,8 @@ def start(direccionA, direccionB, tolerancia=1e-10, iteraciones=500):
         vector.wait(5)
         A = matrix.get()
         b = vector.get()
-        x = jacobi(A, b, float(tolerancia), int(iteraciones))
-        print(x)
+        for i in range(0,10):
+            result = jacobi(A, b, float(tolerancia), int(iteraciones))
+            f = open("valoresPuntoPy.csv", "a")
+            f.write("Jacobi HPC #,"+i+","+result+"\n")
+            f.close()

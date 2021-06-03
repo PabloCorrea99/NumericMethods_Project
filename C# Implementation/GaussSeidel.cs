@@ -17,7 +17,7 @@ namespace Proyecto
 		/// <param name="e">Error, si no es colocado el error es de 0.2</param>
 		/// <param name="iGuess">Vector del valor inicial, si no es colocado se ponen un vector 0</param>
 		/// <returns>Vector con la solucion, que para o por iteracion o por error</returns>
-        public static double[] GaussSeidelMethod(double[][] laMatriz, double[] respuesta, bool imprimir = false, int iterations = 50, double e = 0.02, double[] iGuess = null)
+        public static long GaussSeidelMethod(double[][] laMatriz, double[] respuesta, bool imprimir = false, int iterations = 50, double e = 0.02, double[] iGuess = null)
         {
 			Console.WriteLine("Gauss-Seidel Empieza");
 			if(!VectoresYMatrices.sePuedeUsar(laMatriz,respuesta))
@@ -70,7 +70,8 @@ namespace Proyecto
 				Console.WriteLine("Step #" + (iterations-1) + ": " + String.Join(", ", solucion1.Select(v => v.ToString()).ToArray())+"\tError: "+ error.ToString());
 			
 			Console.WriteLine("Elapsed Time is {0} ms", stopwatch.ElapsedMilliseconds);
-            return solucion1;
+            // return solucion1;
+			return stopwatch.ElapsedMilliseconds;
         }
     }
 }
