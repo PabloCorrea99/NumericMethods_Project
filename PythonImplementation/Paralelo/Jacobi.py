@@ -1,6 +1,6 @@
 import os
 import numpy as np
-from ReadData import readMatrix, readVector
+from .ReadData import readMatrix, readVector
 import time
 import threading
 from multiprocessing import Pool
@@ -20,24 +20,22 @@ def jacobi(A, b, c, n, m):
         
         c[i] = (b[i] - suma) / A[i,i] 
     
-
-if __name__ == '__main__':
-
+def start(direccionA, direccionB, tolerancia, iteraciones):
     with Pool(processes=2) as pool:
 
         #Se crea la matriz A
-        matrix = pool.apply_async(readMatrix,())
-        
+        matrix = pool.apply_async(readMatrix,(direccionA,))
+            
         # Se crea el vector B
-        vector = pool.apply_async(readVector,())
+        vector = pool.apply_async(readVector,(direccionB,))
         matrix.wait(50)
         vector.wait(5)
         A = matrix.get()
         b = vector.get()
         x = np.zeros_like(b, dtype=np.double)
 
-        tolerance=1e-10
-        max_iterations=500
+        tolerance= float(tolerancia)
+        max_iterations=int(iteraciones)
         t0 = time.time()
         bloques = int(len(A[0]))/10
 
@@ -86,8 +84,8 @@ if __name__ == '__main__':
                 break
 
 
-        t1 = time.time()     
-        total = t1-t0
-        print(total)     
-        print(x)
+            t1 = time.time()     
+            total = t1-t0
+            print(total)     
+            print(x)
         

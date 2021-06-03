@@ -1,5 +1,5 @@
 import numpy as np
-from ReadData import readMatrix, readVector
+from .ReadData import readMatrix, readVector
 import time
 
 
@@ -30,13 +30,13 @@ def jacobi(a, b, x, tolerance=0.00001, kmax=500):
     print(total)   
     return x
 
-#Se crea la matriz A
-A = readMatrix()
+def start():
+    #Se crea la matriz A
+    A = readMatrix()
 
-# initialize the RHS vector
-b = readVector()
-x = np.zeros_like(b, dtype=np.double)
-result = jacobi(A,b,x)
-print(result)
-
+    # initialize the RHS vector
+    b = readVector()
+    x = np.zeros_like(b, dtype=np.double)
+    result = jacobi(A,b,x)
+    print(result)
 

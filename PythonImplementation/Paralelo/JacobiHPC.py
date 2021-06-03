@@ -1,5 +1,5 @@
 import numpy as np
-from ReadData import readMatrix, readVector
+from .ReadData import readMatrix, readVector
 import time
 from multiprocessing import Pool
 
@@ -28,10 +28,10 @@ def jacobi(A, b, tolerance=1e-10, max_iterations=500):
     print(total)     
     return x
 
-if __name__ == '__main__':
+
+def start():
 
     with Pool(processes=2) as pool:
-
         #Se crea la matriz A
         matrix = pool.apply_async(readMatrix,())
         
@@ -41,6 +41,5 @@ if __name__ == '__main__':
         vector.wait(5)
         A = matrix.get()
         b = vector.get()
-
         x = jacobi(A, b)
         print(x)
