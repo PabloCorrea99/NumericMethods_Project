@@ -54,9 +54,8 @@ namespace Proyecto
 		/// Se escribe la matriz m
 		/// </summary>
 		/// <param name="m">Escribir la matriz m en un archivo de texto</param>
-		public static void escribirMatriz(double[][] m)
-		{
-			String filepath= @"C:\numeric\matriz.txt";
+		public static void escribirMatriz(double[][] m, String filepath= @"C:\numeric\matriz.txt")
+		{	
 			List<String> lineas = new List<string>();
 			double[] x;
 			for(int i = 0; i < m.Length; i++)
@@ -136,9 +135,8 @@ namespace Proyecto
 		/// Se escribe el vector v
 		/// </summary>
 		/// <param name="v">Escribir el vector v en un archivo de texto</param>
-		public static void escribirVector(double[] v)
+		public static void escribirVector(double[] v,String filepath= @"C:\numeric\vector.txt")
 		{
-			String filepath= @"C:\numeric\vector.txt";
 			List<String> lineas = new List<string>();
 			lineas.Add(string.Join(", ", v));	
 			File.WriteAllLines(filepath,lineas);
