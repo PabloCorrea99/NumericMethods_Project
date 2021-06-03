@@ -9,7 +9,7 @@ Método que calcula (haciendo uso del paralelismo) la solución a un sistema de 
 Entradas: Matriz Diagonalmente Dominante A, vector independiente b, tolerancia y maximo de iteraciones.
 Salida: Vector de solución x.
 '''
-def jacobi(a, b, x, tolerance=0.00001, kmax=500):
+def jacobi(a, b, x, tolerance, kmax):
     t0 = time.time()
     n = a.shape[0]
     k = 1
@@ -30,13 +30,13 @@ def jacobi(a, b, x, tolerance=0.00001, kmax=500):
     print(total)   
     return x
 
-def start():
+def start(direccionA, direccionB, tolerancia=1e-10, iteraciones=500):
     #Se crea la matriz A
-    A = readMatrix()
+    A = readMatrix(direccionA)
 
-    # initialize the RHS vector
-    b = readVector()
+    #Se crea el vector independiente b
+    b = readVector(direccionB)
     x = np.zeros_like(b, dtype=np.double)
-    result = jacobi(A,b,x)
+    result = jacobi(A,b,x, float(tolerancia), int(iteraciones))
     print(result)
 
