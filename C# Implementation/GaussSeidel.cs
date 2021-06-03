@@ -1,6 +1,7 @@
 using System;
 using System.Linq;	//Vector de 0s
 using System.Diagnostics; // StopWatch
+using System.IO;
 
 namespace Proyecto
 {
@@ -20,6 +21,8 @@ namespace Proyecto
         public static long GaussSeidelMethod(double[][] laMatriz, double[] respuesta, bool imprimir = false, int iterations = 50, double e = 0.02, double[] iGuess = null)
         {
 			Console.WriteLine("Gauss-Seidel Empieza");
+			
+			String write = " Gauss-Seidel Paralel iterations ";
 			if(!VectoresYMatrices.sePuedeUsar(laMatriz,respuesta))
 			{
 				Environment.Exit(0);
@@ -58,8 +61,9 @@ namespace Proyecto
 
 				if(error <= e)
 				{
-					Console.WriteLine("Para por criterio error deseado");
-					Console.WriteLine("Step #" + p + ": " + String.Join(", ", solucion1.Select(v => v.ToString()).ToArray())+"\tError: "+ error.ToString());
+					// Console.WriteLine("Para por criterio error deseado");
+					// Console.WriteLine("Step #" + p + ": " + String.Join(", ", solucion1.Select(v => v.ToString()).ToArray())+"\tError: "+ error.ToString());
+					write+=p.ToString();
 					termino = true;
 					break;
 				}
@@ -67,10 +71,17 @@ namespace Proyecto
             }
 			stopwatch.Stop();
 			if(!termino)
-				Console.WriteLine("Step #" + (iterations-1) + ": " + String.Join(", ", solucion1.Select(v => v.ToString()).ToArray())+"\tError: "+ error.ToString());
-			
-			Console.WriteLine("Elapsed Time is {0} ms", stopwatch.ElapsedMilliseconds);
+			{
+				write+=iterations.ToString();
+				// Console.WriteLine("Step #" + (iterations-1) + ": " + String.Join(", ", solucion1.Select(v => v.ToString()).ToArray())+"\tError: "+ error.ToString());
+			}
+			// Console.WriteLine("Elapsed Time is {0} ms", stopwatch.ElapsedMilliseconds);
             // return solucion1;
+			write+=" Error: "+error.ToString()+" ["+solucion[laMatriz.Length-2]+","+solucion[laMatriz.Length-1]+"]";
+			write = "Gauss-Seidel Elapsed Time in ms: "+ stopwatch.ElapsedMilliseconds + write;
+			StreamWriter streamWriter = new StreamWriter("valores.txt", append: true);
+			streamWriter.WriteLine(write);
+			streamWriter.Close();
 			return stopwatch.ElapsedMilliseconds;
         }
     }

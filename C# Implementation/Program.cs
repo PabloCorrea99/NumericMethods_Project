@@ -67,75 +67,80 @@ namespace Proyecto
 
             // // -----------------------------------------------------------
 			// // Consola
-            // Console.WriteLine("Escriba el path del vector");
-            // String pathVector = Console.ReadLine();
-            // Console.WriteLine("Escriba el path del Matriz");
-            // String pathMatriz = Console.ReadLine();
-            // Console.WriteLine("Escriba tamaño vector");
-            // int num = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("Escriba el path del vector");
+            String pathVector = Console.ReadLine();
+            Console.WriteLine("Escriba el path del Matriz");
+            String pathMatriz = Console.ReadLine();
+            Console.WriteLine("Escriba tamaño vector");
+            int num = Convert.ToInt32(Console.ReadLine());
 
-			// double[][] p = new double[num][];
-			// VectoresYMatrices.leerMatriz(p,pathMatriz);
+			double[][] p = new double[num][];
+			VectoresYMatrices.leerMatriz(p,pathMatriz);
 
-			// double[] x = new double[num];
-			// VectoresYMatrices.leerVector(x,pathVector);
+			double[] x = new double[num];
+			VectoresYMatrices.leerVector(x,pathVector);
 
-            // Console.WriteLine("Escriba 0 para Jacobi u otro numero para Gauss-Seidel");
-            // int metodo = Convert.ToInt32(Console.ReadLine());
-            // string s,m;
-            // if(metodo==0)
-            // {            
-            //     for(int i = 0; i<10;i++)
-            //     {
-            //         s = Jacobi.JacobiMethod(p,x,false,100,0.000001).ToString();
-            //         m = Jacobi.JacobiMethodParalel(p,x,false,100,0.000001).ToString();
-            //         StreamWriter puntos = new StreamWriter("valoresPuntosCs.csv", append: true);
-            //         s = "Jacobi Method #," +i.ToString()+ "," + s;
-            //         m = "Jacobi Paralelo #," +i.ToString()+ "," + m;
-            //         puntos.WriteLine(s);
-            //         puntos.WriteLine(m);
-            //         puntos.Close();
-            //     }
-            // }
-            // else
-            // {
-            //     GaussSeidel.GaussSeidelMethod(p, x, false,100);
-            // }
-            // Console.WriteLine("Escriba el error");
-            // double error = Convert.ToDouble(Console.ReadLine());
+            Console.WriteLine("Escriba 0 para Jacobi u otro numero para Gauss-Seidel");
+            int metodo = Convert.ToInt32(Console.ReadLine());
+            string s,m,g;
+            if(metodo==0)
+            {            
+                for(int i = 0; i<10;i++)
+                {
+                    s = Jacobi.JacobiMethod(p,x,false,100,0.000001).ToString();
+                    m = Jacobi.JacobiMethodParalel(p,x,false,100,0.000001).ToString();
+                    StreamWriter puntos = new StreamWriter("valoresPuntosCs.csv", append: true);
+                    s = "Jacobi Method #," +i.ToString()+ "," + s;
+                    m = "Jacobi Paralelo #," +i.ToString()+ "," + m;
+                    puntos.WriteLine(s);
+                    puntos.WriteLine(m);
+                    puntos.Close();
+                }
+            }
+            else
+            {
+                for(int i=0; i<10;i++)
+                {
+                    g = GaussSeidel.GaussSeidelMethod(p,x,false,100,0.000001).ToString();
+                    StreamWriter puntos = new StreamWriter("valoresPuntosCs.csv", append: true);
+                    g = "Gauss-Seidel Paralelo #," +i.ToString()+ "," + g;
+                    puntos.WriteLine(g);
+                    puntos.Close(); 
+                }
+            }
 
             // -----------------------------------------------------------
 			// Leer desde .txts
             
-			double[][] p = new double[5000][];
-			double[] x = new double[5000];
-            VectoresYMatrices.leerMatriz(p,"C:\\numeric\\numeric5000-atriz.txt");
-            VectoresYMatrices.leerVector(x,"C:\\numeric\\numeric5000vector.txt");
-            String s,m,g;
-            for(int i=0;i<10;i++)
-            {      
-                s = Jacobi.JacobiMethod(p,x,false,100,0.000001).ToString();
-                StreamWriter puntos = new StreamWriter("valoresPuntosCs.csv", append: true);
-                s = "Jacobi Method #," +i.ToString()+ "," + s;
-                puntos.WriteLine(s);
-                puntos.Close();  
-            }
-            for(int i=0;i<10;i++)
-            {      
-                m = Jacobi.JacobiMethodParalel(p,x,false,100,0.000001).ToString();
-                StreamWriter puntos = new StreamWriter("valoresPuntosCs.csv", append: true);
-                m = "Jacobi Paralelo #," +i.ToString()+ "," + m;
-                puntos.WriteLine(m);
-                puntos.Close();  
-            }
-            for(int i=0;i<10;i++)
-            {      
-                g = GaussSeidel.GaussSeidelMethod(p,x,false,100,0.000001).ToString();
-                StreamWriter puntos = new StreamWriter("valoresPuntosCs.csv", append: true);
-                g = "Gauss-Seidel Paralelo #," +i.ToString()+ "," + g;
-                puntos.WriteLine(g);
-                puntos.Close();  
-            }
+			// double[][] p = new double[5000][];
+			// double[] x = new double[5000];
+            // VectoresYMatrices.leerMatriz(p,"C:\\numeric\\numeric5000-atriz.txt");
+            // VectoresYMatrices.leerVector(x,"C:\\numeric\\numeric5000vector.txt");
+            // String s,m,g;
+            // for(int i=0;i<10;i++)
+            // {      
+            //     s = Jacobi.JacobiMethod(p,x,false,100,0.000001).ToString();
+            //     StreamWriter puntos = new StreamWriter("valoresPuntosCs.csv", append: true);
+            //     s = "Jacobi Method #," +i.ToString()+ "," + s;
+            //     puntos.WriteLine(s);
+            //     puntos.Close();  
+            // }
+            // for(int i=0;i<10;i++)
+            // {      
+            //     m = Jacobi.JacobiMethodParalel(p,x,false,100,0.000001).ToString();
+            //     StreamWriter puntos = new StreamWriter("valoresPuntosCs.csv", append: true);
+            //     m = "Jacobi Paralelo #," +i.ToString()+ "," + m;
+            //     puntos.WriteLine(m);
+            //     puntos.Close();  
+            // }
+            // for(int i=0;i<10;i++)
+            // {      
+            //     g = GaussSeidel.GaussSeidelMethod(p,x,false,100,0.000001).ToString();
+            //     StreamWriter puntos = new StreamWriter("valoresPuntosCs.csv", append: true);
+            //     g = "Gauss-Seidel Paralelo #," +i.ToString()+ "," + g;
+            //     puntos.WriteLine(g);
+            //     puntos.Close();  
+            // }
 			// //-----------------------------------------------------------
 			// // Creando randoms
 
