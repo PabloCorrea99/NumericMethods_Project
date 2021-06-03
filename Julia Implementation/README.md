@@ -8,11 +8,22 @@ Implementation of secuential and parallel Jacobi and secuential Gauss-Seidel Met
 
 This package is for measuring the execution time of each method.
 
-To install it enter to the Julia Command-Line, also known as the REPL(read-eval-print-loop) and execute this lines
+To install it enter to the Julia Command-Line, also known as the REPL(read-eval-print-loop) and execute this lines.
 
 ```
 using Pkg
 Pkg.add("TickTock")
+```
+
+### ArgParse
+
+This package is for take arguments from the command line when executing a method.
+
+To install it enter to the Julia Command-Line, also known as the REPL(read-eval-print-loop) and execute this lines.
+
+```
+using Pkg
+Pkg.add("ArgParse")
 ```
 
 ## How to run it?
@@ -22,13 +33,13 @@ Pkg.add("TickTock")
 1. Jacobi
 
 ```
-julia jacobi.jl
+julia jacobi.jl -a <path_to_matrix_a> -b <path_to_vector_b>
 ```
 
 2. Gauss-Seidel
 
 ```
-julia gauss-seidel.jl
+julia gauss-seidel.jl -a <path_to_matrix_a> -b <path_to_vector_b>
 ```
 
 ### Parallel Method
@@ -36,5 +47,9 @@ julia gauss-seidel.jl
 1. Jacobi
 
 ```
-julia -t <number of threads> jacobi.jl
+$env:JULIA_NUM_THREADS=<number_of_threads>
+```
+
+```
+julia jacobi.jl -a <path_to_matrix_a> -b <path_to_vector_b>
 ```
